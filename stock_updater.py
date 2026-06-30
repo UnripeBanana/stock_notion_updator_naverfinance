@@ -3,6 +3,7 @@ import yfinance as yf
 import os
 from datetime import datetime
 from zoneinfo import ZoneInfo
+import requests
 
 def rich_text(value):
     return {
@@ -14,6 +15,30 @@ def rich_text(value):
                 }
             }
         ]
+    }
+def get_naver_price(code):
+
+    headers = {
+        "User-Agent": "Mozilla/5.0"
+    }
+
+    url = (
+        f"https://polling.finance.naver.com/api/realtime"
+        f"?query=SERVICE_ITEM:{code}"
+    )
+
+    data = requests.get(
+        url,
+        headers=headers,
+        timeout=10
+    ).json()
+
+    item = data["result"]["areas"][0]["datas"][0]
+
+    return {
+        "price": item["nv"],
+        "change": item["cv"],
+        "rate": item["cr"]
     }
 
 NOTION_TOKEN = os.environ["NOTION_TOKEN"]
@@ -39,8 +64,28 @@ def update_stock_prices():
         ticker = ticker_data[0]["plain_text"]
 
         try:
-            stock = yf.Ticker(ticker)
+            # 국내 주식 여부
+            if ticker.isdigit():
 
+                price_info = get_naver_price(ticker)
+
+                current_price = price_info["price"]
+                change = price_info["change"]
+
+                stock = yf.Ticker(f"{ticker}.KS")
+        
+            else:
+
+                stock = yf.Ticker(ticker)
+
+                hist = stock.history(period="5d")
+
+                current_price = float(hist["Close"].iloc[-1])
+                previous_price = float(hist["Close"].iloc[-2])
+
+                change = current_price - previous_price
+
+            
             info = stock.info
             market_cap = info.get("marketCap", 0)
             if market_cap is None:
@@ -53,17 +98,6 @@ def update_stock_prices():
             country = info.get("country")
             sector = info.get("sector")
             industry = info.get("industry")
-
-            hist = stock.history(period="5d")
-
-            if len(hist) < 2:
-                print(f"{ticker}: 데이터 부족")
-                continue
-
-            current_price = float(hist["Close"].iloc[-1])
-            previous_price = float(hist["Close"].iloc[-2])
-
-            change = current_price - previous_price
 
             update_time = datetime.now(
                 ZoneInfo("Asia/Seoul")
