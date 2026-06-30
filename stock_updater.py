@@ -40,6 +40,7 @@ def get_naver_price(code):
         "price": item["nv"],
         "change": item["cv"],
         "rate": item["cr"]
+        "rf": item["rf"]
     }
 
 NOTION_TOKEN = os.environ["NOTION_TOKEN"]
@@ -65,30 +66,25 @@ def update_stock_prices():
         ticker = ticker_data[0]["plain_text"]
 
         try:
-            # 국내 주식 여부
-            if ticker.isdigit():
+            # 국내 주식 여부 (네이버 증권)
+            ticker.isdigit():
 
-                price_info = get_naver_price(ticker)
+            price_info = get_naver_price(ticker)
 
-                current_price = price_info["price"]
-                change = price_info["change"]
+            current_price = price_info["price"]
+            change = price_info["change"]
+            # 하락이면 음수로 변경
+            if price_info["rf"] == "5":
+                change = -change
 
-                stock = yf.Ticker(f"{ticker}.KS")
-                
-            else:
-
-                stock = yf.Ticker(ticker)
-
-                hist = stock.history(period="5d")
-
-                current_price = float(hist["Close"].iloc[-1])
-                previous_price = float(hist["Close"].iloc[-2])
-
-                change = current_price - previous_price
-
+            ###################################
             
+            # y_finance
+            stock = yf.Ticker(f"{ticker}.KS")
+
             info = stock.info
             market_cap = info.get("marketCap", 0)
+            
             if market_cap is None:
                 market_cap = 0
 
