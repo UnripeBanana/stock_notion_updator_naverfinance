@@ -34,7 +34,7 @@ def get_naver_price(code):
     ).json()
 
     item = data["result"]["areas"][0]["datas"][0]
-    print(json.dumps(item, indent=4, ensure_ascii=False))
+    print(item)
     
     return {
         "price": item["nv"],
