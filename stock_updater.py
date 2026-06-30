@@ -76,6 +76,7 @@ def update_stock_prices():
             # 하락이면 음수로 변경
             if price_info["rf"] == "5":
                 change = -change
+                upanddown = -upanddown
 
             ###################################
             
@@ -108,7 +109,7 @@ def update_stock_prices():
                     "number": change
                 },
                 "등락률_깃허브_원본": {
-                    "number": 
+                    "number": upanddown
                 },
                 "시가총액_깃허브": {
                     "number": market_cap
