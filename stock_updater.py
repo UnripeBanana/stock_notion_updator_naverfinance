@@ -41,6 +41,7 @@ def get_naver_price(code):
         "change": item["cv"],
         "rate": item["cr"],
         "rf": item["rf"]
+        "cr": item["cr"]
     }
 
 NOTION_TOKEN = os.environ["NOTION_TOKEN"]
@@ -71,6 +72,7 @@ def update_stock_prices():
 
             current_price = price_info["price"]
             change = price_info["change"]
+            upanddown = price_info["cr"]
             # 하락이면 음수로 변경
             if price_info["rf"] == "5":
                 change = -change
@@ -104,6 +106,9 @@ def update_stock_prices():
                 },
                 "전일대비_깃허브": {
                     "number": change
+                },
+                "등락률_깃허브_원본": {
+                    "number": 
                 },
                 "시가총액_깃허브": {
                     "number": market_cap
