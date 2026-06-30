@@ -34,7 +34,8 @@ def get_naver_price(code):
     ).json()
 
     item = data["result"]["areas"][0]["datas"][0]
-
+    print(json.dumps(item, indent=4, ensure_ascii=False))
+    
     return {
         "price": item["nv"],
         "change": item["cv"],
@@ -73,9 +74,6 @@ def update_stock_prices():
                 change = price_info["change"]
 
                 stock = yf.Ticker(f"{ticker}.KS")
-                print(item)
-                print("\n\n")
-                print(item.keys())
                 
             else:
 
