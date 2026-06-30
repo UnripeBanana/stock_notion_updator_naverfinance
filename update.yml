@@ -1,0 +1,26 @@
+name: Update Stock Prices
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 9-15 * * 1-5'
+    - cron: '35 15 * * 1-5'
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - run: pip install -r requirements.txt
+
+      - run: python3 main.py
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_PRICE_DB_ID: ${{ secrets.NOTION_PRICE_DB_ID }}
+          NOTION_TRADE_DB_ID: ${{ secrets.NOTION_TRADE_DB_ID }}
