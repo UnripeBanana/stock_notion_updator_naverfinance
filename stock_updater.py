@@ -67,8 +67,6 @@ def update_stock_prices():
 
         try:
             # 국내 주식 여부 (네이버 증권)
-            ticker.isdigit():
-
             price_info = get_naver_price(ticker)
 
             current_price = price_info["price"]
