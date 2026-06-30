@@ -73,7 +73,10 @@ def update_stock_prices():
                 change = price_info["change"]
 
                 stock = yf.Ticker(f"{ticker}.KS")
-        
+                print(item)
+                print("\n\n")
+                print(item.keys())
+                
             else:
 
                 stock = yf.Ticker(ticker)
