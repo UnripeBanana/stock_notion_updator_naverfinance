@@ -1,0 +1,1 @@
+# stock_notion_updator_naverfinance
