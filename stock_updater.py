@@ -41,7 +41,8 @@ def get_naver_price(code):
         "change": item["cv"],
         "rate": item["cr"],
         "rf": item["rf"],
-        "cr": item["cr"]
+        "cr": item["cr"],
+        "countOfListedStock": item["countOfListedStock"]
     }
 
 NOTION_TOKEN = os.environ["NOTION_TOKEN"]
@@ -78,6 +79,8 @@ def update_stock_prices():
                 change = -change
                 upanddown = -upanddown
 
+            countOfListedStock = price_info["countOfListedStock"]
+
             ###################################
             
             # y_finance
@@ -112,7 +115,7 @@ def update_stock_prices():
                     "number": upanddown
                 },
                 "시가총액_깃허브": {
-                    "number": market_cap
+                    "number": countOfListedStock*current_price
                 },
                 "52주 최고가": {
                     "number": high_52
