@@ -39,7 +39,7 @@ def get_naver_price(code):
     return {
         "price": item["nv"],
         "change": item["cv"],
-        "rate": item["cr"]
+        "rate": item["cr"],
         "rf": item["rf"]
     }
 
