@@ -3,8 +3,7 @@ name: Update Stock Prices
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 0-6 * * 1-5'
-    - cron: '35 6 * * 1-5'
+    - cron: '*/10 0-23 * * 1-5'
 
 jobs:
   update:
